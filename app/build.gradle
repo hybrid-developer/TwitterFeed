@@ -21,6 +21,10 @@ android {
         resConfigs "en"
     }
 
+    androidExtensions {
+        experimental = true
+    }
+
     splits {
         abi {
             enable true
@@ -86,7 +90,6 @@ dependencies {
     implementation project(':feature-feed')
     implementation project(':core-viewmodel')
     implementation project(':core-network')
-    implementation project(':core-ui')
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 

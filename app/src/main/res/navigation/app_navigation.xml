@@ -24,10 +24,14 @@
         android:id="@+id/FeedFragment"
         android:name="com.zavaitar.feature.feed.presentation.FeedFragment"
         android:label="FeedFragment"
-        tools:layout="@layout/feed_fragment"/>
+        tools:layout="@layout/feed_list_item"/>
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.zavaitar.feature.feed.presentation.FeedActivity"
         android:label="Feed Activity"
-        tools:layout="@layout/feed_fragment"/>
+        tools:layout="@layout/feed_list_item"/>
+    <activity
+        android:id="@+id/startupActivity"
+        android:name="com.zavaitar.feature.startup.presentation.StartupActivity"
+        android:label="StartupActivity" />
 </navigation>

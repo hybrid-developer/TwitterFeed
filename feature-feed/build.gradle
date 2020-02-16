@@ -37,6 +37,8 @@ android {
 dependencies {
 
     implementation project(':core-viewmodel')
+    implementation project(':core-ui')
+    implementation project(':core-network')
 
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
@@ -78,13 +80,11 @@ dependencies {
     testImplementation "junit:junit:${versions.junit}"
     testImplementation "org.junit.platform:junit-platform-runner:${versions.junitPlatformRunner}"
 
-    /* spek */
-    testImplementation "org.jetbrains.spek:spek-api:${versions.spekApi}"
-    testImplementation "org.jetbrains.spek:spek-junit-platform-engine:${versions.spekJunitPlatformEngine}"
-
     /* assertj */
     testImplementation "org.assertj:assertj-core:${versions.assertj}"
 
-    /* mockito */
-    testImplementation "com.nhaarman:mockito-kotlin:${versions.mockitoKotlin}"
+    /* testing */
+    testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:${versions.mockitoKotlin2}"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:${versions.coroutines}"
+    testImplementation "androidx.arch.core:core-testing:${versions.archRuntime}"
 }

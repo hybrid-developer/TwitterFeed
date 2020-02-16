@@ -7,42 +7,33 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.zavaitar.feature.feed.R
 
+import com.zavaitar.feature.feed.model.TwitterFeed
 
-import com.zavaitar.feature.feed.presentation.FeedFragment.OnListFragmentInteractionListener
-import com.zavaitar.feature.feed.dummy.DummyContent.DummyItem
+import kotlinx.android.synthetic.main.feed_list_item.view.*
 
-import kotlinx.android.synthetic.main.fragment_feed.view.*
-
-/**
- * [RecyclerView.Adapter] that can display a [DummyItem] and makes a call to the
- * specified [OnListFragmentInteractionListener].
- * TODO: Replace the implementation with code for your data type.
- */
 class TwitterFeedRecyclerViewAdapter(
-    private val mValues: List<DummyItem>,
-    private val mListener: OnListFragmentInteractionListener?
+    private val mValues: List<TwitterFeed>,
+    private val mListener: OnItemSelectedListener?
 ) : RecyclerView.Adapter<TwitterFeedRecyclerViewAdapter.ViewHolder>() {
 
     private val mOnClickListener: View.OnClickListener
 
     init {
         mOnClickListener = View.OnClickListener { v ->
-            val item = v.tag as DummyItem
-            // Notify the active callbacks interface (the activity, if the fragment is attached to
-            // one) that an item has been selected.
-            mListener?.onListFragmentInteraction(item)
+            val item = v.tag as TwitterFeed
+            mListener?.onItemSelect(item)
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.fragment_feed, parent, false)
+            .inflate(R.layout.feed_list_item, parent, false)
         return ViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = mValues[position]
-        holder.mIdView.text = item.id
+        holder.mIdView.text = item.createdDate
         holder.mContentView.text = item.content
 
         with(holder.mView) {

@@ -1,6 +1,5 @@
 package com.zavaitar.core.network.interceptors
 
-import androidx.annotation.VisibleForTesting
 import okhttp3.Interceptor
 import okhttp3.Response
 import javax.inject.Inject
@@ -18,7 +17,6 @@ internal class AuthorisationInterceptor @Inject constructor() : Interceptor {
         return chain.proceed(builder.build())
     }
 
-    @VisibleForTesting
     private companion object {
         private const val AUTHORISATION_HEADER_KEY = "Authorization" // 'z' spelling deliberate
         private const val CONTENT_TYPE_HEADER_KEY = "Content-Type"

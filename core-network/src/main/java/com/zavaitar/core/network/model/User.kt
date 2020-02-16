@@ -19,7 +19,7 @@ data class User(
     @SerializedName("friends_count") val friendsCount: Int,
     @SerializedName("geo_enabled") val geoEnabled: Boolean,
     @SerializedName("has_extended_profile") val hasExtendedProfile: Boolean,
-    @SerializedName("id") val id: Int,
+    @SerializedName("id") val id: Long,
     @SerializedName("id_str") val idStr: String,
     @SerializedName("is_translation_enabled") val isTranslationEnabled: Boolean,
     @SerializedName("is_translator") val isTranslator: Boolean,

@@ -1,3 +1,7 @@
 <resources>
-    <string name="app_name">feature-feed</string>
+    <string name="feed_network_error_message">Opps !! Seems like No Network Available !!</string>
+    <string name="feed_data_not_received">hmmm !! We got a runner!! Wait till I catch !</string>
+    <string name="feed_other_error">We are having a break. Will be back shortly !!</string>
+
+    <string name="feed_retryButton_text">Try Again</string>
 </resources>

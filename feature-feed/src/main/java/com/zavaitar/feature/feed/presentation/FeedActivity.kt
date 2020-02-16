@@ -10,7 +10,6 @@ internal class FeedActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d("FeedActivity", "This is FeedActivity")
         setContentView(R.layout.feed_activity)
         AndroidInjection.inject(this)
     }

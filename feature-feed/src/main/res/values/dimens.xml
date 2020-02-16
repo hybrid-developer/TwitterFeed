@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="text_margin">16dp</dimen>
+    <dimen name="feed_retryNetworkButtonHeight">50dp</dimen>
+    <dimen name="feed_retryNetworkButtonWidth">150dp</dimen>
+    <dimen name="feed_errorMessageTextViewHeight">50dp</dimen>
+    <dimen name="feed_twitterFeedListItemHeight">325dp</dimen>
+    <dimen name="feed_twitterFeedListItemCornerRadius">10dp</dimen>
+    <dimen name="feed_twitterFeedListItemCardElevation">5dp</dimen>
+    <dimen name="feed_twitterImageIconSize">50dp</dimen>
 </resources>

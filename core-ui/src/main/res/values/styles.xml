@@ -1,6 +1,6 @@
 <resources>
 
-    <style name="Theme.CurrencyPay" parent="Theme.AppCompat.NoActionBar">
+    <style name="Theme.TwitterFeed" parent="Theme.AppCompat.NoActionBar">
         <!-- General theme colors -->
         <item name="colorPrimary">@color/cpColorPrimary</item>
         <item name="colorPrimaryDark">@color/cpColorPrimaryDark</item>

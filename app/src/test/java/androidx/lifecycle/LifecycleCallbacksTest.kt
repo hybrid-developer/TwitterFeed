@@ -17,8 +17,7 @@ import kotlin.random.Random
 @RunWith(MockitoJUnitRunner::class)
 class LifecycleCallbacksTest {
 
-    @Mock
-    internal lateinit var mockCallbacks: ActivityLifecycleListener
+    @Mock internal lateinit var mockCallbacks: ActivityLifecycleListener
 
     private val className = "MyActivity"
 

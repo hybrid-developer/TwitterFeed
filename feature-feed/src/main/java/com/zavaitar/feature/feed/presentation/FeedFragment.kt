@@ -2,105 +2,98 @@ package com.zavaitar.feature.feed.presentation
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.zavaitar.core.viewmodel.ViewModelFactory
+import com.zavaitar.feature.feed.FeedNavigator
 import com.zavaitar.feature.feed.R
+import com.zavaitar.feature.feed.adapter.OnItemSelectedListener
 import com.zavaitar.feature.feed.adapter.TwitterFeedRecyclerViewAdapter
+import com.zavaitar.feature.feed.model.TwitterFeed
+import com.zavaitar.feature.feed.viewmodel.FeedViewModel
+import dagger.android.support.AndroidSupportInjection
+import kotlinx.android.synthetic.main.feed_list_fragment.*
+import kotlinx.android.synthetic.main.feed_list_fragment.view.*
+import javax.inject.Inject
 
-import com.zavaitar.feature.feed.dummy.DummyContent
-import com.zavaitar.feature.feed.dummy.DummyContent.DummyItem
+class FeedFragment : Fragment(), OnItemSelectedListener {
 
-/**
- * A fragment representing a list of Items.
- * Activities containing this fragment MUST implement the
- * [FeedFragment.OnListFragmentInteractionListener] interface.
- */
-class FeedFragment : Fragment() {
+    @Inject lateinit var viewModelFactory: ViewModelFactory
+    @Inject lateinit var feedNavigator: FeedNavigator
 
-    // TODO: Customize parameters
-    private var columnCount = 1
-
-    private var listener: OnListFragmentInteractionListener? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        Log.d("FeedFragment", "This is Feed Fragment")
-
-        arguments?.let {
-            columnCount = it.getInt(ARG_COLUMN_COUNT)
-        }
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        val view = inflater.inflate(R.layout.fragment_feed_list, container, false)
-
-        // Set the adapter
-        if (view is RecyclerView) {
-            with(view) {
-                layoutManager = when {
-                    columnCount <= 1 -> LinearLayoutManager(context)
-                    else -> GridLayoutManager(context, columnCount)
-                }
-                adapter =
-                    TwitterFeedRecyclerViewAdapter(
-                        DummyContent.ITEMS,
-                        listener
-                    )
-            }
-        }
-        return view
+    private val viewModel: FeedViewModel by lazy {
+        ViewModelProvider(this, viewModelFactory).get(FeedViewModel::class.java)
     }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        if (context is OnListFragmentInteractionListener) {
-            listener = context
-        } else {
-           // throw RuntimeException(context.toString() + " must implement OnListFragmentInteractionListener")
+        AndroidSupportInjection.inject(this)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        feedToolbar.setTitle(R.string.app_name)
+        setupRetryButton()
+        subscribeObservers()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.loadTwitterFeed()
+    }
+
+    override fun onItemSelect(item: TwitterFeed?) {
+        Toast.makeText(context, item!!.content, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun subscribeObservers() {
+        viewModel.twitterFeedEvent.observe(viewLifecycleOwner, renderTwitterFeedItems)
+        viewModel.errorScreenEvent.observe(viewLifecycleOwner, renderErrorScreenEvent)
+        viewModel.dataLoadingStopEvent.observe(viewLifecycleOwner, renderDataLoadingStopEvent)
+        viewModel.errorMessageDisplayStatusEvent.observe(viewLifecycleOwner,
+            renderErrorMessageDisplayEvent)
+    }
+
+    private val renderErrorScreenEvent = Observer<Int> { errorMessage ->
+        errorMessageTextView.text = getString(errorMessage)
+    }
+
+    private val renderDataLoadingStopEvent = Observer<Void> {
+        feedLoadingProgressBar.visibility = View.GONE
+    }
+
+    private val renderTwitterFeedItems = Observer<List<TwitterFeed>> {
+        twitterFeedRecyclerView.adapter = TwitterFeedRecyclerViewAdapter(it, this)
+    }
+
+    private val renderErrorMessageDisplayEvent = Observer<Boolean> { visibilityStatus ->
+        errorMessageLayout.visibility = if (visibilityStatus) View.VISIBLE else View.GONE
+    }
+
+    private fun setupRetryButton() {
+        retryNetworkCallButton.setOnClickListener {
+            viewModel.loadTwitterFeed()
         }
     }
 
-    override fun onDetach() {
-        super.onDetach()
-        listener = null
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     *
-     *
-     * See the Android Training lesson
-     * [Communicating with Other Fragments](http://developer.android.com/training/basics/fragments/communicating.html)
-     * for more information.
-     */
-    interface OnListFragmentInteractionListener {
-        // TODO: Update argument type and name
-        fun onListFragmentInteraction(item: DummyItem?)
-    }
-
-    companion object {
-        // TODO: Customize parameter argument names
-        const val ARG_COLUMN_COUNT = "column-count"
-
-        // TODO: Customize parameter initialization
-        @JvmStatic
-        fun newInstance(columnCount: Int) =
-            FeedFragment().apply {
-                arguments = Bundle().apply {
-                    putInt(ARG_COLUMN_COUNT, columnCount)
-                }
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        val rootView = inflater.inflate(R.layout.feed_list_fragment, container, false)
+        if (rootView.twitterFeedRecyclerView is RecyclerView) {
+            with(rootView.twitterFeedRecyclerView) {
+                layoutManager = LinearLayoutManager(context)
             }
+        }
+        return rootView
     }
 }
